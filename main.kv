@@ -1,0 +1,71 @@
+# main.kv
+#:kivy 2.2.0
+
+ScreenManager:
+    id:scr_mngr
+    MainScreen:
+    SecondScreen:
+        id:second_scr
+
+<MainScreen>:
+    id:main
+    name: 'main'
+    watch_lbl: watch_lbl
+    count_lbl: count_lbl
+    orientation: 'vertical'
+    MDTopAppBar:
+        id:toolbar
+        pos_hint: {"top": 1}
+        title: 'HamsterApp'
+        anchor_title: "left"
+        right_action_items:
+            [
+            ["history", lambda x: app.callback('second')],
+            ["rotate-360", lambda x: root.reset()]
+            ]
+    MDGridLayout:
+        rows: 4
+        padding: 10, 50, 10, 0
+        MDLabel:
+            id: watch_lbl
+            text: root.stopwatch_time
+            halign: 'center'
+            theme_text_color: "Custom"
+            text_color: 1, 1, 1, 1
+            font_style: 'H2'
+        MDFillRoundFlatButton:
+            text: 'Добавить 2'
+            font_style: 'H2'
+            on_press: root.on_press(self)
+            size_hint: 1, 0.7
+        MDLabel:
+            id: count_lbl
+            text: root.counter
+            font_style: 'H2'
+            halign: 'center'
+
+<SecondScreen>:
+    id:second
+    name: 'second'
+    MDGridLayout:
+        rows: 3
+        canvas:
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        MDTopAppBar:
+            id:toolbar
+            pos_hint: {"top": 1}
+            title: "История"
+            anchor_title: "left"
+            left_action_items: [["arrow-left", lambda x: app.callback('main')]]
+            right_action_items: [["google-drive", lambda x: app.export()]]
+        MDLabel:
+            id: count_lbl
+            text: "Последние 10 записей"
+            font_style: 'H5'
+            halign: 'center'
+            size_hint: None, None
+            size: 700, 80
+        AnchorLayout:
+            id: data_layout
